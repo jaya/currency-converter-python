@@ -21,7 +21,7 @@ services:
     environment:
       DATABASE_URL: postgresql+asyncpg://jaya:jaya@db:5432/jaya
       ENVIRONMENT: development
-      CURRENCY_API_KEY: your-api-key-here
+      CURRENCY_API_KEY: cur_live_rJQoltg6TMk4IK78QFGcAEHBW83DZP5Bgs8tNng7
 
   db:
     image: postgres

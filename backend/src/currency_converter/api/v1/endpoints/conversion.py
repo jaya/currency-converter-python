@@ -3,6 +3,7 @@ from decimal import Decimal
 from ....schemas.conversion import ConversionRequest, ConversionResponse
 from ....services.conversion import ConversionService
 from ....db.session import get_db
+from ....db.repositories import ConversionRepository
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -31,5 +32,3 @@ async def convert_currency(
         }
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Internal server error")
