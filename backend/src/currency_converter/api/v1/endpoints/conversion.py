@@ -28,7 +28,8 @@ async def convert_currency(
             "to_currency": request.to_currency,
             "from_value": float(request.amount),
             "to_value": float(result["converted_amount"]),
-            "rate": float(result["rate"])
+            "rate": float(result["rate"]),
+            "timestamp": result["timestamp"]
         }
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

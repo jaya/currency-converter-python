@@ -4,7 +4,7 @@ from .session import Base
 
 class ConversionTransaction(Base):
     __tablename__ = "conversion_transactions"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(String, index=True)
     from_currency = Column(String(3))

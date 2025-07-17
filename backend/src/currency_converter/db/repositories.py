@@ -6,7 +6,7 @@ from typing import List
 class ConversionRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
-    
+
     async def create_transaction(
         self,
         user_id: str,
@@ -28,7 +28,7 @@ class ConversionRepository:
         await self.session.commit()
         await self.session.refresh(transaction)
         return transaction
-    
+
     async def get_transactions_by_user(self, user_id: str) -> List[ConversionTransaction]:
         result = await self.session.execute(
             select(ConversionTransaction)
