@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import HomePage from './pages/HomePage';
+import HistoryPage from './pages/HistoryPage';
 import Header from './components/Layout/Header';
 import Footer from './components/Layout/Footer';
 
@@ -31,6 +32,7 @@ const App: React.FC = () => {
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/history" element={<HistoryPage />} />
         </Routes>
         <Footer />
       </Router>

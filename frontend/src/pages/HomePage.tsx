@@ -10,8 +10,7 @@ const HomePage: React.FC = () => {
   return (
     <Container maxWidth="md">
       <Box sx={{ my: 4 }}>
-        <CurrencyConverter />
-        <TransactionHistory userId={userId} />
+        <CurrencyConverter userId={userId} />
       </Box>
     </Container>
   );

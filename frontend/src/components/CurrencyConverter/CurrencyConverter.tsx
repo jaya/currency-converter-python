@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
-import { 
-  Box, 
-  TextField, 
-  Button, 
-  Select, 
-  MenuItem, 
-  FormControl, 
-  InputLabel, 
-  Typography, 
+import {
+  Box,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Typography,
   Paper,
   CircularProgress,
   Alert
 } from '@mui/material';
 import { convertCurrency } from '../../services/conversion';
-import { ConversionRequest } from '../../types/conversion';
+//import { ConversionRequest } from '../../types/conversion';
 
-const CurrencyConverter: React.FC = () => {
+import * as typesConversions from '../../types/conversion';
+const ConversionRequest = typesConversions.ConversionRequest;
+
+const CurrencyConverter: React.FC = ({ userId }) => {
   const [fromCurrency, setFromCurrency] = useState('USD');
   const [toCurrency, setToCurrency] = useState('BRL');
   const [amount, setAmount] = useState('');
@@ -41,7 +44,7 @@ const CurrencyConverter: React.FC = () => {
 
     try {
       const request: ConversionRequest = {
-        user_id: 'current_user', // In a real app, this would come from auth
+        user_id: userId,
         from_currency: fromCurrency,
         to_currency: toCurrency,
         amount: parseFloat(amount)
@@ -62,9 +65,9 @@ const CurrencyConverter: React.FC = () => {
       <Typography variant="h5" gutterBottom>
         Currency Converter
       </Typography>
-      
+
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      
+
       <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
         <TextField
           label="Amount"
@@ -75,7 +78,7 @@ const CurrencyConverter: React.FC = () => {
           onChange={(e) => setAmount(e.target.value)}
         />
       </Box>
-      
+
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
         <FormControl fullWidth>
           <InputLabel>From</InputLabel>
@@ -89,7 +92,7 @@ const CurrencyConverter: React.FC = () => {
             ))}
           </Select>
         </FormControl>
-        
+
         <FormControl fullWidth>
           <InputLabel>To</InputLabel>
           <Select
@@ -103,7 +106,7 @@ const CurrencyConverter: React.FC = () => {
           </Select>
         </FormControl>
       </Box>
-      
+
       <Button
         variant="contained"
         onClick={handleConvert}
@@ -113,7 +116,7 @@ const CurrencyConverter: React.FC = () => {
       >
         {loading ? <CircularProgress size={24} /> : 'Convert'}
       </Button>
-      
+
       {result !== null && (
         <Box sx={{ mt: 3, textAlign: 'center' }}>
           <Typography variant="h6">
