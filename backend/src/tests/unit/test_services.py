@@ -1,6 +1,6 @@
 import pytest
 from decimal import Decimal
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, patch
 from src.currency_converter.services.conversion import ConversionService
 from src.currency_converter.services.currency_api import CurrencyAPIService
 
