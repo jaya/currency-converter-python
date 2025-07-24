@@ -35,6 +35,7 @@ This application allows users to:
 
 #### Clean Architecture Approach
 
+```
 backend/
 ├── api/ # Interface layer
 │ └── v1/ # API versioning
@@ -47,7 +48,7 @@ backend/
 │ └── session.py
 ├── services/ # Business logic
 └── schemas/ # Data validation
-
+```
 
 Key decisions:
 1. **Async PostgreSQL**: Chose asyncpg over psycopg2 for better performance with FastAPI
@@ -59,6 +60,7 @@ Key decisions:
 
 #### Component-Based Structure
 
+```
 frontend/
 ├── src/
 │ ├── components/ # Reusable UI components
@@ -67,7 +69,7 @@ frontend/
 │ ├── types/ # Type definitions
 │ ├── App.tsx # Root component
 │ └── main.tsx # Entry point
-
+```
 
 Key decisions:
 1. **Atomic Design**: Components organized by complexity
@@ -99,29 +101,21 @@ Key decisions:
 
 ## Getting Started
 
-### Backend Setup
+### Build and start services
 ```bash
-cd backend
-poetry install
-cp .env.example .env
-alembic upgrade head
-uvicorn src.currency_converter.main:app --reload
+docker compose up -d
 ```
 
-### Frontend Setup
-
+### Monitor services startup
 ```bash
-cd frontend
-npm install
-npm run dev
+docker compose logs -f
 ```
-Testing
-Run backend tests:
 
+### Initate database
 ```bash
-cd backend
-poetry run pytest --cov=./ --cov-report=xml
+docker compose exec backend poetry run alembic upgrade head
 ```
+
 
 ## Key Features
 
