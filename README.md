@@ -97,7 +97,6 @@ Key decisions:
 | **Pages**      | Route-level components                 | `HomePage.tsx`             |
 | **Services**   | API communication                      | `api.ts`                   |
 | **Types**      | Type definitions                       | `conversion.ts`            |
-| **State**      | Global state management                | (Context/Redux if used)    |
 
 ## Getting Started
 
