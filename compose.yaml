@@ -6,9 +6,9 @@ services:
     volumes:
       - ./frontend:/home/node/app
     command: >-
-      bash -c "npm install && npm run dev -- --host"
+      bash -c "npm install && npm run dev"
     ports:
-      - "5173:5173"
+      - "3000:3000"
 
   backend:
     build: ./backend

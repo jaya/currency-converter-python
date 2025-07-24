@@ -1,9 +1,10 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import CurrencyConverter from './CurrencyConverter';
-import * as api from '../../../services/conversion';
+import * as api from '../../services/conversion';
 
-jest.mock('../../../services/conversion');
+vi.mock('../../services/conversion');
+
 
 describe('CurrencyConverter', () => {
   it('should convert currency successfully', async () => {
@@ -13,13 +14,13 @@ describe('CurrencyConverter', () => {
     });
 
     render(<CurrencyConverter />);
-    
+
     fireEvent.change(screen.getByLabelText('Amount'), {
       target: { value: '100' }
     });
-    
+
     fireEvent.click(screen.getByText('Convert'));
-    
+
     await waitFor(() => {
       expect(screen.getByText('100 USD = 525.32 BRL')).toBeInTheDocument();
     });

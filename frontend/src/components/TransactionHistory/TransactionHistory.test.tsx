@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import TransactionHistory from './TransactionHistory';
-import * as api from '../../../services/conversion';
+import * as api from '../../services/conversion';
 
-jest.mock('../../../services/conversion');
+vi.mock('../../services/conversion');
 
 const mockTransactions = [
   {
@@ -23,16 +23,16 @@ describe('TransactionHistory', () => {
     (api.getUserTransactions as jest.Mock).mockImplementation(
       () => new Promise(() => {})
     );
-    
+
     render(<TransactionHistory userId="test_user" />);
     expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 
   it('displays transactions after loading', async () => {
     (api.getUserTransactions as jest.Mock).mockResolvedValue(mockTransactions);
-    
+
     render(<TransactionHistory userId="test_user" />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('USD')).toBeInTheDocument();
       expect(screen.getByText('BRL')).toBeInTheDocument();
@@ -45,9 +45,9 @@ describe('TransactionHistory', () => {
     (api.getUserTransactions as jest.Mock).mockRejectedValue(
       new Error('Failed to fetch')
     );
-    
+
     render(<TransactionHistory userId="test_user" />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('Failed to load transaction history')).toBeInTheDocument();
     });

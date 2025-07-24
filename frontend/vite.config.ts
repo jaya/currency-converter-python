@@ -10,4 +10,9 @@ export default defineConfig({
     host: true,
     port: 3000
   },
+  test: {
+    setupFiles: ['./vitest-setup.js'],
+    globals: true,
+    environment: "jsdom"
+  }
 })
