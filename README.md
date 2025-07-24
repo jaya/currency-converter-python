@@ -1,123 +1,126 @@
-# 🧪 Desafio Técnico - Backend Python (FastAPI)
+# Currency Converter Application
 
-## 💸 Conversor de Moedas
+![App Screenshot](/screenshot.png)
 
-Você deverá implementar uma aplicação que permita a conversão de valores entre moedas, utilizando **Python com FastAPI** no backend. O frontend pode ser opcionalmente implementado em Vue.js ou React.
+A full-stack currency conversion application with transaction history tracking.
 
-> **Importante:** Caso você não tenha experiência com frontend, a entrega pode ser feita exclusivamente com a API.
+## Purpose
 
----
+This application allows users to:
+- Convert between 4 major currencies (BRL, USD, EUR, JPY)
+- View their conversion history
+- Get real-time exchange rates from CurrencyAPI
 
-## 📆 Requisitos do Projeto
-
-### ✅ Funcionalidades Principais
-- A API deve permitir a conversão entre pelo menos 4 moedas:
-  - BRL (Real)
-  - USD (Dólar Americano)
-  - EUR (Euro)
-  - JPY (Iene)
-
-- As taxas de câmbio devem ser obtidas da API:
-  - https://app.currencyapi.com/
-  - Documentação: https://currencyapi.com/docs
-
-### 🔐 Persistência das Transações
-Cada transação realizada deve ser registrada com as seguintes informações:
-- ID do usuário
-- Moeda de origem e destino
-- Valor de origem
-- Valor convertido
-- Taxa de conversão
-- Data/Hora UTC
-
-### 🔍 Endpoint de Consulta
-- `GET /transactions?userId=123`
-
-#### Exemplo de retorno:
-```json
-{
-  "transactionId": 42,
-  "userId": 123,
-  "fromCurrency": "USD",
-  "toCurrency": "BRL",
-  "fromValue": 100,
-  "toValue": 525.32,
-  "rate": 5.2532,
-  "timestamp": "2024-05-19T18:00:00Z"
-}
-```
-
-### ❌ Casos de Erro
-Deverão retornar:
-- Código HTTP apropriado
-- Mensagem de erro clara e objetiva
-
----
-
-## 🧪 Testes
-- A aplicação deve conter testes unitários e de integração com `pytest`
-
----
-
-## 📄 README.md
-Deve conter:
-- Instruções para executar o projeto
-- Explicação do propósito
-- Principais decisões de arquitetura
-- Organização das camadas (ex: routers, services, repositories, models)
-- O conteúdo deve estar todo em inglês
-
----
-
-## 🧰 Itens Desejáveis (Diferenciais)
-- Logs estruturados (ex: `loguru`, `structlog`)
-- Tratamento de exceções com middlewares
-- Documentação automática (Swagger já embutido no FastAPI)
-- Linter (ex: `ruff`, `black`, `flake8`)
-- Deploy funcional (ex: Render, Railway, Fly.io)
-- CI/CD com GitHub Actions
-
-### Frontend (opcional)
-- Vue.js 3 + TypeScript ou React + TypeScript
-- TailwindCSS
-- Axios
-- Testes com Cypress, RTL ou Vitest
-
----
-
-## 🚀 Tecnologias Esperadas
+## Tech Stack
 
 ### Backend
-- Python 3.10+
-- FastAPI
-- SQLAlchemy 2.x ou Tortoise ORM
-- PostgreSQL ou SQLite
-- Pytest
+- **Python 3.10+**
+- **FastAPI** (REST API framework)
+- **SQLAlchemy** (ORM)
+- **AsyncPG** (PostgreSQL driver)
+- **Pytest** (testing)
+- **Poetry** (dependency management)
 
----
+### Frontend
+- **React 18** (TypeScript)
+- **Material-UI** (UI components)
+- **TailwindCSS** (utility CSS)
+- **React Router** (navigation)
+- **Axios** (HTTP client)
+- **Vite** (build tool)
 
-## ⭐ Perfil Desejado
-- Boas práticas REST
-- Arquitetura limpa e escalável
-- Conhecimentos em AWS são diferenciais
-- Experiência com CI/CD
-- Boa comunicação e clareza de código
+## Architectural Decisions
 
----
+### Backend Architecture
 
-## 📋 Entrega
-1. Crie um repositório público no GitHub
-2. Crie uma branch com seu nome em snake_case (ex: `joao_silva_souza`)
-3. Suba seu código com commits organizados
-4. Abra um Pull Request com:
-   - **Título:** `Entrega - joao_silva_souza`
-   - **Descrição:** Nome completo, data da entrega e observações
+#### Clean Architecture Approach
 
----
+```
+backend/
+├── api/ # Interface layer
+│ └── v1/ # API versioning
+│ ├── endpoints/
+│ └── routers.py
+├── core/ # Configuration
+├── db/ # Data layer
+│ ├── models.py
+│ ├── repositories.py
+│ └── session.py
+├── services/ # Business logic
+└── schemas/ # Data validation
+```
 
-## 📢 Considerações Finais
-- Cite alternativas gratuitas caso use serviços pagos
-- Clareza, boas práticas e organização serão avaliadas
-- Pode adicionar um `THOUGHTS.md` com decisões técnicas e observações
+Key decisions:
+1. **Async PostgreSQL**: Chose asyncpg over psycopg2 for better performance with FastAPI
+2. **Layer Separation**: Strict separation between routes, services and repositories
+3. **Alembic Migrations**: Database version control instead of metadata.create_all()
+4. **CurrencyAPI Integration**: External rates provider with proper error handling
 
-Boa sorte! 🚀
+### Frontend Architecture
+
+#### Component-Based Structure
+
+```
+frontend/
+├── src/
+│ ├── components/ # Reusable UI components
+│ ├── pages/ # Route-level components
+│ ├── services/ # API clients
+│ ├── types/ # Type definitions
+│ ├── App.tsx # Root component
+│ └── main.tsx # Entry point
+```
+
+Key decisions:
+1. **Atomic Design**: Components organized by complexity
+2. **Centralized API Client**: Single Axios instance with interceptors
+3. **TypeScript**: Strict typing throughout the application
+4. **Tailwind + MUI**: Combined styling approach for rapid development
+
+## Layer Organization
+
+### Backend Layers
+
+| Layer          | Responsibility                          | Example Files              |
+|----------------|----------------------------------------|----------------------------|
+| **API**        | HTTP interface, routing                | `endpoints/conversion.py`  |
+| **Services**   | Business logic, use cases              | `services/conversion.py`   |
+| **Repositories** | Database operations                   | `repositories.py`          |
+| **Models**     | Data structure, ORM mapping           | `models.py`                |
+| **Schemas**    | Request/response validation           | `schemas/conversion.py`    |
+
+### Frontend Layers
+
+| Layer          | Responsibility                          | Example Files              |
+|----------------|----------------------------------------|----------------------------|
+| **Components** | Presentational UI elements             | `CurrencyConverter.tsx`    |
+| **Pages**      | Route-level components                 | `HomePage.tsx`             |
+| **Services**   | API communication                      | `api.ts`                   |
+| **Types**      | Type definitions                       | `conversion.ts`            |
+
+## Getting Started
+
+### Build and start services
+```bash
+docker compose up -d
+```
+
+### Monitor services startup
+```bash
+docker compose logs -f
+```
+
+### Initate database
+```bash
+docker compose exec backend poetry run alembic upgrade head
+```
+
+
+## Key Features
+
+- Real-time currency conversion
+- Transaction history tracking
+- Responsive UI
+- Comprehensive error handling
+- Swagger API documentation
+- Unit and integration tests
