@@ -3,6 +3,7 @@ LABEL authors="nutaro@protonmail.com"
 
 RUN apt update -y
 RUN apt upgrade -y
+RUN apt install libpq-dev -y
 
 WORKDIR /opt/app
 
