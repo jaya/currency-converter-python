@@ -17,5 +17,5 @@ def get_engine() -> Engine:
 
 def get_session() -> Session:
     engine = get_engine()
-    Session = sessionmaker(bind=engine, expire_on_commit=False)
-    return Session()
+    session = sessionmaker(bind=engine, expire_on_commit=False)
+    return session()
