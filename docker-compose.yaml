@@ -1,0 +1,18 @@
+services:
+  database:
+    image: postgres
+    container_name: database
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - 5432:5432
+  api:
+    container_name: api
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/opt/app
+    environment:
+      CURRENCY_KEY: ${CURRENCY_KEY}
+    ports:
+      - 8080:80
