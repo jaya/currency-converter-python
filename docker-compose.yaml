@@ -1,7 +1,7 @@
 services:
   database:
     image: postgres
-    container_name: database
+    container_name: currency_database
     environment:
       POSTGRES_PASSWORD: example
     ports:
@@ -16,3 +16,5 @@ services:
       CURRENCY_KEY: ${CURRENCY_KEY}
     ports:
       - 8080:80
+    depends_on:
+      - database
