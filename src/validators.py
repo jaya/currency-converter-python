@@ -8,7 +8,7 @@ def validate_currency(value: str) -> str:
     return value
 
 
-class Convert(BaseModel):
+class TransactionRequest(BaseModel):
 
     value: float = Field(ge=0, title="The value to convert")
     from_currency: str
@@ -24,3 +24,16 @@ class Convert(BaseModel):
     @classmethod
     def validate_to_currency(cls, value: str) -> str:
         return validate_currency(value)
+
+
+class TransactionResponse(BaseModel):
+    transaction_id: int = Field(
+        title="Transaction ID", description="The transaction ID"
+    )
+    user_id: int = Field(title="User ID", description="The user ID")
+    from_currency: str = Field(title="From Currency", description="The From Currency")
+    to_currency: str = Field(title="To Currency", description="The To Currency")
+    from_value: float = Field(title="From Value", description="The From Value")
+    to_value: float = Field(title="To Value", description="The To Value")
+    rate: float = Field(title="Rate", description="The Rate")
+    timestamp: str = Field(title="Timestamp", description="The Timestamp")

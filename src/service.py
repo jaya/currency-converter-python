@@ -1,21 +1,22 @@
+from typing import Sequence
+
 from currencyapicom import Client
+from sqlalchemy import Row
 
 from config import Config
-from database import get_session
 from exceptions import (
     CurrencyAPIException,
     FailToParseException,
-    FailToStoreDataException,
 )
 from logger import CustomLogger
 from model import Transaction
-from validators import Convert
-
+from repository import TransactionRepository
+from validators import TransactionRequest
 
 logger = CustomLogger().get_logger()
 
 
-class CurrencyService:
+class TransactionService:
 
     def __init__(self) -> None:
         try:
@@ -24,9 +25,9 @@ class CurrencyService:
         except Exception:
             logger.exception("Failed to get currency exchange list")
             raise CurrencyAPIException("Currency API is unavailable")
-        self._session = get_session()
+        self._repository = TransactionRepository()
 
-    def calculate_transaction(self, data: Convert):
+    def calculate_transaction(self, data: TransactionRequest):
         try:
             rate_to = self.__exchanges["data"][data.to_currency]["value"]
             rate_from = self.__exchanges["data"][data.from_currency]["value"]
@@ -38,7 +39,9 @@ class CurrencyService:
             logger.exception(message)
             raise FailToParseException(message)
 
-    def __build(self, data: Convert, rate: float, value: float) -> Transaction:
+    def __build(
+        self, data: TransactionRequest, rate: float, value: float
+    ) -> Transaction:
         transaction = Transaction()
         transaction.user_id = data.user_id
         transaction.rate = rate
@@ -46,17 +49,10 @@ class CurrencyService:
         transaction.to_currency = data.to_currency
         transaction.from_value = data.value
         transaction.to_value = value
+        self._repository.persist(transaction)
         return transaction
 
-    def persist(self, transaction: Transaction) -> Transaction:
-        try:
-            self._session.add(transaction)
-            self._session.commit()
-            return transaction
-        except Exception:
-            message = f"Failed to persist {transaction}"
-            logger.exception(message)
-            raise FailToStoreDataException(message)
-
-    def __del__(self) -> None:
-        self._session.close()
+    def get_transactions_by_user_id(
+        self, user_id: int
+    ) -> Sequence[Row[tuple[Transaction]]]:
+        return self._repository.find_transactions_by_user_id(user_id)
