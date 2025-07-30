@@ -1,8 +1,7 @@
 from typing import List
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from starlette.responses import JSONResponse
-from starlette.requests import Request
 
 from exceptions import BaseCustomException
 from logger import CustomLogger
@@ -13,8 +12,8 @@ logger = CustomLogger().get_logger()
 app = FastAPI()
 
 
-@app.exception_handlers(BaseCustomException)
-def custom_exception_handler(request: Request, exc: BaseCustomException):
+@app.exception_handler(BaseCustomException)
+async def exception_handler(request: Request, exc: BaseCustomException):
     status_code = exc.status_code
     message = exc.message
     return JSONResponse(status_code=status_code, content={"message": message})

@@ -1,8 +1,9 @@
 class BaseCustomException(Exception):
 
-    def __init__(self, message, status_code: int = 500) -> None:
+    def __init__(self, message: str, status_code: int = 500) -> None:
         self.status_code = status_code
         self.message = message
+        super().__init__(self.message)
 
 
 class CurrencyAPIException(BaseCustomException):
@@ -21,3 +22,4 @@ class TransactionNotFoundException(BaseCustomException):
     def __init__(self, message, status_code: int = 404) -> None:
         self.status_code = status_code
         self.message = message
+        super().__init__(self.message, status_code)
