@@ -20,8 +20,8 @@ class TransactionService:
 
     def __init__(self) -> None:
         try:
-            self.__client = Client(Config.CURRENCY_API_KEY)
-            self.__exchanges = self.__client.latest()
+            self._client = Client(Config.CURRENCY_API_KEY)
+            self._exchanges = self._client.latest()
         except Exception:
             logger.exception("Failed to get currency exchange list")
             raise CurrencyAPIException("Currency API is unavailable")
@@ -29,17 +29,17 @@ class TransactionService:
 
     def calculate_transaction(self, data: TransactionRequest):
         try:
-            rate_to = self.__exchanges["data"][data.to_currency]["value"]
-            rate_from = self.__exchanges["data"][data.from_currency]["value"]
+            rate_to = self._exchanges["data"][data.to_currency]["value"]
+            rate_from = self._exchanges["data"][data.from_currency]["value"]
             dollar_amount = 1 / rate_from * data.value
             value = dollar_amount * rate_to
-            return self.__build(data, rate_to, value)
+            return self._build(data, rate_to, value)
         except Exception:
             message = f"Failed to convert {data.to_currency} to {data.from_currency}"
             logger.exception(message)
             raise FailToParseException(message)
 
-    def __build(
+    def _build(
         self, data: TransactionRequest, rate: float, value: float
     ) -> Transaction:
         transaction = Transaction()
