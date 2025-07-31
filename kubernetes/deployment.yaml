@@ -45,8 +45,8 @@ metadata:
   name: currency-converter-config
 data:
   DATABASE_DRIVER: "postgresql+psycopg2"
-  DATABASE_HOST: "database"
-  DATABASE_PORT: "5432"
+  DATABASE_HOST: "postgres-service"
+  DATABASE_PORT: "9000"
   DATABASE_NAME: "postgres"
 ---
 apiVersion: v1
@@ -67,6 +67,6 @@ metadata:
   name: currency-converter-secret
 type: opaque
 data:
-  DATABASE_USER:
-  DATABASE_PASSWORD:
-  CURRENCY_KEY:
+  DATABASE_USER: cG9zdGdyZXM=
+  DATABASE_PASSWORD: ZXhhbXBsZQ==
+  CURRENCY_KEY: Y3VyX2xpdmVfT3JDSGZMZ3VYbUczSkh0R1pGcVd4a1lnYWw2dkptSm93TkVqT2tjZA==
