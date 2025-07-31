@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: currency-converter-deployment
+  labels:
+    app: currency-converter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: currency-converter
+  template:
+    metadata:
+      labels:
+        app: currency-converter
+    spec:
+      containers:
+      - name: currency-converter
+        image: nutaro/currency_converter:1.0
+        ports:
+        - containerPort: 80
+        envFrom:
+          - configMapRef:
+              name: currency-converter-config
+        env:
+          - name: DATABSE_USER
+            valueFrom:
+              secretKeyRef:
+                name: currency-converter-secret
+                key: DATABASE_USER
+          - name: DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: currency-converter-secret
+                key: DATABASE_PASSWORD
+          - name: CURRENCY_KEY
+            valueFrom:
+              secretKeyRef:
+                name: currency-converter-secret
+                key: CURRENCY_KEY
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: currency-converter-config
+data:
+  DATABASE_DRIVER: "postgresql+psycopg2"
+  DATABASE_HOST: "database"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "postgres"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: currency-converter-service
+spec:
+  selector:
+    app: currency-converter
+  ports:
+    - port: 8879
+      targetPort: 80
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: currency-converter-secret
+type: opaque
+data:
+  DATABASE_USER: cG9zdGdyZXM=
+  DATABASE_PASSWORD: ZXhhbXBsZQ==
+  CURRENCY_KEY: Y3VyX2xpdmVfT3JDSGZMZ3VYbUczSkh0R1pGcVd4a1lnYWw2dkptSm93TkVqT2tjZA==
