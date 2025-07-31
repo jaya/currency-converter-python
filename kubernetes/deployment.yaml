@@ -67,6 +67,6 @@ metadata:
   name: currency-converter-secret
 type: opaque
 data:
-  DATABASE_USER: cG9zdGdyZXM=
-  DATABASE_PASSWORD: ZXhhbXBsZQ==
-  CURRENCY_KEY: Y3VyX2xpdmVfT3JDSGZMZ3VYbUczSkh0R1pGcVd4a1lnYWw2dkptSm93TkVqT2tjZA==
+  DATABASE_USER:
+  DATABASE_PASSWORD:
+  CURRENCY_KEY:
