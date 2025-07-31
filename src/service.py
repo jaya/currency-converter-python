@@ -2,6 +2,7 @@ from typing import Sequence
 
 from currencyapicom import Client
 from sqlalchemy import Row
+from sqlalchemy.orm import Session
 
 from config import Config
 from exceptions import (
@@ -18,14 +19,14 @@ logger = CustomLogger().get_logger()
 
 class TransactionService:
 
-    def __init__(self) -> None:
+    def __init__(self, session: Session) -> None:
         try:
             self._client = Client(Config.CURRENCY_API_KEY)
             self._exchanges = self._client.latest()
         except Exception:
             logger.exception("Failed to get currency exchange list")
             raise CurrencyAPIException("Currency API is unavailable")
-        self._repository = TransactionRepository()
+        self._repository = TransactionRepository(session)
 
     def calculate_transaction(self, data: TransactionRequest):
         try:

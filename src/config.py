@@ -10,3 +10,4 @@ class Config:
     DATABASE_HOST = getenv("DATABASE_HOST", "localhost")
     DATABASE_PORT = getenv("DATABASE_PORT", "5432")
     DATABASE_NAME = getenv("DATABASE_NAME", "postgres")
+    TEST_DATABASE = ""

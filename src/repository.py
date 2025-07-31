@@ -1,8 +1,8 @@
 from typing import Sequence
 
 from sqlalchemy import select, Row
+from sqlalchemy.orm import Session
 
-from database import get_session
 from exceptions import TransactionNotFoundException, FailToStoreDataException
 from logger import CustomLogger
 from model import Transaction
@@ -13,8 +13,8 @@ logger = CustomLogger().get_logger()
 
 class TransactionRepository:
 
-    def __init__(self) -> None:
-        self._session = get_session()
+    def __init__(self, session: Session) -> None:
+        self._session = session
 
     def find_transactions_by_user_id(
         self, user_id: int
@@ -36,6 +36,3 @@ class TransactionRepository:
             message = f"Failed to persist {transaction}"
             logger.exception(message)
             raise FailToStoreDataException(message)
-
-    def __del__(self):
-        self._session.close()

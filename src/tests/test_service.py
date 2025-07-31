@@ -12,8 +12,8 @@ from validators import TransactionRequest
 def test_calculate_transaction(
     client: MagicMock, transaction_repository: MagicMock
 ) -> None:
-    service = TransactionService()
-    fixture = json.load(open("tests/fixtures/exchanges.json", "r"))
+    service = TransactionService(MagicMock())
+    fixture = json.load(open("src/tests/fixtures/exchanges.json", "r"))
     service._exchanges = fixture
     service._build = MagicMock()
     assert client.called
@@ -31,7 +31,7 @@ def test_calculate_transaction(
 def test_should_raise_exception_when_calculation_fails(
     client: MagicMock, repository: MagicMock
 ) -> None:
-    service = TransactionService()
+    service = TransactionService(MagicMock())
     service._exchanges = {}
     service._build = MagicMock()
     data = TransactionRequest(
@@ -48,13 +48,13 @@ def test_should_raise_exception_when_use_wrong_api_key(
 ) -> None:
     config.CURRENCY_API_KEY = ""
     with pytest.raises(CurrencyAPIException):
-        TransactionService()
+        TransactionService(MagicMock())
 
 
 @patch("service.TransactionRepository", return_value=MagicMock())
 @patch("service.Client", return_value=MagicMock())
 def test_should_build_transaction(client: MagicMock, repository: MagicMock) -> None:
-    service = TransactionService()
+    service = TransactionService(MagicMock())
     service._repository.persist = MagicMock()
     data = TransactionRequest(
         from_currency="USD", to_currency="BRL", value=100, user_id=10
@@ -68,7 +68,7 @@ def test_should_build_transaction(client: MagicMock, repository: MagicMock) -> N
 @patch("service.TransactionRepository", return_value=MagicMock())
 @patch("service.Client", return_value=MagicMock())
 def test_should_call_repository(client: MagicMock, repository: MagicMock) -> None:
-    service = TransactionService()
+    service = TransactionService(MagicMock())
     service._repository.find_transactions_by_user_id = MagicMock()
     service.get_transactions_by_user_id(11)
     assert service._repository.find_transactions_by_user_id.called

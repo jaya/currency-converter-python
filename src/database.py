@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, Engine
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import sessionmaker
 
 from config import Config
 
@@ -15,7 +15,10 @@ def get_engine() -> Engine:
     return create_engine(database_url, echo=False)
 
 
-def get_session() -> Session:
+def get_session():
     engine = get_engine()
-    session = sessionmaker(bind=engine, expire_on_commit=False)
-    return session()
+    session = sessionmaker(bind=engine, expire_on_commit=False)()
+    try:
+        yield session
+    finally:
+        session.close()

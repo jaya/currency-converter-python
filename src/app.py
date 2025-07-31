@@ -1,8 +1,11 @@
 from typing import List
 
 from fastapi import FastAPI, Request
+from fastapi.params import Depends
+from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
+from database import get_session
 from exceptions import BaseCustomException
 from logger import CustomLogger
 from service import TransactionService
@@ -20,8 +23,10 @@ async def exception_handler(request: Request, exc: BaseCustomException):
 
 
 @app.post("/transactions")
-async def create_transaction(data: TransactionRequest) -> TransactionResponse:
-    service = TransactionService()
+async def create_transaction(
+    data: TransactionRequest, session: Session = Depends(get_session)
+) -> TransactionResponse:
+    service = TransactionService(session)
     transaction = service.calculate_transaction(data)
     date = transaction.timestamp.strftime("%Y-%m-%dT%H:%M:%S%z")
     response = TransactionResponse(
@@ -38,8 +43,10 @@ async def create_transaction(data: TransactionRequest) -> TransactionResponse:
 
 
 @app.get("/transactions")
-async def get_transactions(user_id: int) -> List[TransactionResponse]:
-    service = TransactionService()
+async def get_transactions(
+    user_id: int, session: Session = Depends(get_session)
+) -> List[TransactionResponse]:
+    service = TransactionService(session)
     response = []
     transactions = service.get_transactions_by_user_id(user_id)
     for transaction in transactions:
