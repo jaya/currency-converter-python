@@ -22,11 +22,6 @@ async def exception_handler(request: Request, exc: BaseCustomException):
     return JSONResponse(status_code=status_code, content={"message": message})
 
 
-@app.get("/health")
-async def health():
-    return JSONResponse(status_code=200, content={})
-
-
 @app.post("/transactions")
 async def create_transaction(
     data: TransactionRequest, session: Session = Depends(get_session)
