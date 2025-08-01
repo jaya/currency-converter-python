@@ -1,0 +1,26 @@
+services:
+  database:
+    image: postgres
+    container_name: currency_database
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - 5432:5432
+  api:
+    container_name: api
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/opt/app
+    environment:
+      CURRENCY_KEY: ${CURRENCY_KEY}
+      DATABASE_DRIVER: postgresql+psycopg2
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: example
+      DATABASE_HOST: database
+      DATABASE_PORT: 5432
+      DATABASE_NAME: postgres
+    ports:
+      - 8080:80
+    depends_on:
+      - database
