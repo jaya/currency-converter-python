@@ -4,7 +4,6 @@
 * [pip](https://pip.pypa.io/en/stable/installation/)
 * [docker](https://docs.docker.com/engine/install/)
 * [docker-compose](https://docs.docker.com/compose/install/)
-* [make](https://www.gnu.org/software/make/)
 
  you must export this env var to run migrations in your database this example uses the database define in the docker-compose
 ```shell
