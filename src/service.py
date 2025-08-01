@@ -17,21 +17,25 @@ from validators import TransactionRequest
 logger = CustomLogger().get_logger()
 
 
+def get_exchanges() -> dict:
+    try:
+        return Client(Config.CURRENCY_API_KEY).latest()
+    except Exception:
+        logger.exception("Failed to get currency exchange list")
+        raise CurrencyAPIException("Currency API is unavailable")
+
+
 class TransactionService:
 
     def __init__(self, session: Session) -> None:
-        try:
-            self._client = Client(Config.CURRENCY_API_KEY)
-            self._exchanges = self._client.latest()
-        except Exception:
-            logger.exception("Failed to get currency exchange list")
-            raise CurrencyAPIException("Currency API is unavailable")
         self._repository = TransactionRepository(session)
 
-    def calculate_transaction(self, data: TransactionRequest):
+    def calculate_transaction(
+        self, data: TransactionRequest, exchanges: dict
+    ) -> Transaction:
         try:
-            rate_to = self._exchanges["data"][data.to_currency]["value"]
-            rate_from = self._exchanges["data"][data.from_currency]["value"]
+            rate_to = exchanges["data"][data.to_currency]["value"]
+            rate_from = exchanges["data"][data.from_currency]["value"]
             dollar_amount = 1 / rate_from * data.value
             value = dollar_amount * rate_to
             return self._build(data, rate_to, value)

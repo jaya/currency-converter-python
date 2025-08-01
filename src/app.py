@@ -8,7 +8,7 @@ from starlette.responses import JSONResponse
 from database import get_session
 from exceptions import BaseCustomException
 from logger import CustomLogger
-from service import TransactionService
+from service import TransactionService, get_exchanges
 from validators import TransactionRequest, TransactionResponse
 
 logger = CustomLogger().get_logger()
@@ -24,10 +24,12 @@ async def exception_handler(request: Request, exc: BaseCustomException):
 
 @app.post("/transactions")
 async def create_transaction(
-    data: TransactionRequest, session: Session = Depends(get_session)
+    data: TransactionRequest,
+    session: Session = Depends(get_session),
+    exchanges: dict = Depends(get_exchanges),
 ) -> TransactionResponse:
     service = TransactionService(session)
-    transaction = service.calculate_transaction(data)
+    transaction = service.calculate_transaction(data, exchanges)
     date = transaction.timestamp.strftime("%Y-%m-%dT%H:%M:%S%z")
     response = TransactionResponse(
         transaction_id=transaction.id,
