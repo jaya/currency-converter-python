@@ -5,6 +5,10 @@
 * [docker](https://docs.docker.com/engine/install/)
 * [docker-compose](https://docs.docker.com/compose/install/)
 
+to run the tests just
+```shell
+pytest
+```
  you must export this env var to run migrations in your database this example uses the database define in the docker-compose
 ```shell
 export DATABASE_URL=postgresql+psycopg2://postgres:example@localhost:5432/postgres
