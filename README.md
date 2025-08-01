@@ -64,7 +64,7 @@ kubectl apply -f kubernetes/
 ```
 port forward the database
 ```shell
-kubectl port-forward service/postgres-service 9000:8000
+kubectl port-forward service/postgres-service 8000:9000
 ```
 change your ENV VAR DATABASE_URL
 ```shell
